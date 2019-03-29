@@ -42,11 +42,11 @@ app.set('views', 'server/views');
 app.set('view engine', 'html');
 
 app.get('/restaurant-search/:location/:term', async (req, res) => {
-  const {term, location} = req.params;
+  const { term, location } = req.params;
   try {
     let response = await yelpSearch(term, location);
     res.status(200).json(response.data);
-  } catch {
+  } catch (err) {
     res.status(500).send(err);
   }
 });
@@ -64,7 +64,7 @@ app.get('*', (req, res) => {
     console.log(
       `NODE_ENV is ${NODE_ENV}. Your app is listening on port ${
         listener.address().port
-      }`,
+      }`
     );
   });
-}());
+})();

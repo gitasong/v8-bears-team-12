@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 function Register() {
+  const [image, setImage] = useState({});
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -38,18 +39,20 @@ function Register() {
     ) {
       // create new user
       const newUser = {
+        image,
         firstName,
         lastName,
         email,
         password,
         zipcode,
-        interests,
+        interests: interests.split(',').splice(0, 5),
         dietRestrictions,
       };
 
       console.log(newUser);
 
       // reset all fields
+      setImage({});
       setFirstName('');
       setLastName('');
       setEmail('');
@@ -76,9 +79,11 @@ function Register() {
     <div>
       <h1>Sign Up</h1>
       <p>Create your account</p>
-      {/* TODO: Add code for uploading image */}
       <form onSubmit={onSubmit}>
-        <div />
+        <div>
+          <label>Image</label>
+          <input type="file" onChange={e => setImage(e.target.files[0])} />
+        </div>
         <div>
           <label>First Name: </label>
           <input
@@ -153,11 +158,7 @@ function Register() {
         </div>
         <div>
           <label>Diet Restrictions: </label>
-          <select
-            value={dietRestrictions}
-            // onChange={e => setDietRestrictions(e.target.value)}
-            onChange={e => handleOptions(e)}
-          >
+          <select value={dietRestrictions} onChange={e => handleOptions(e)}>
             <option>Choose one...</option>
             {options.map((i, j) => {
               return (
