@@ -13,6 +13,7 @@ function Register() {
   const [optionOther, setOptionOther] = useState(false);
 
   const otherOption = React.createRef();
+  const getImage = React.createRef();
 
   const options = [
     'None a.k.a. I eat anything and everything',
@@ -28,6 +29,19 @@ function Register() {
       setDietRestrictions(e.target.value);
       setOptionOther(false);
     }
+  }
+
+  function showImage(e) {
+    console.log(e.target.files[0]);
+
+    const iFile = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(iFile);
+    reader.onload = e => {
+      console.log(e.target.result);
+    };
+
+    // TODO: Store image to database to be shown as user image
   }
 
   function onSubmit(e) {
@@ -80,9 +94,28 @@ function Register() {
       <h1>Sign Up</h1>
       <p>Create your account</p>
       <form onSubmit={onSubmit}>
-        <div>
-          <label>Image</label>
-          <input type="file" onChange={e => setImage(e.target.files[0])} />
+        <div
+          style={{
+            width: '100px',
+            height: '100px',
+            border: '1px solid grey',
+            borderRadius: '50%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundImage: { image },
+          }}
+        >
+          <input
+            style={{ display: 'none' }}
+            type="file"
+            ref={getImage}
+            // onChange={e => setImage(e.target.files[0])}
+            onChange={e => showImage(e)}
+          />
+          <button onClick={() => getImage.current.click()} type="button">
+            Upload Image
+          </button>
         </div>
         <div>
           <label>First Name: </label>
