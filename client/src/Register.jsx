@@ -31,7 +31,7 @@ function Register() {
     }
   }
 
-  function showImage(e) {
+  function handleImageUpload(e) {
     console.log(e.target.files[0]);
 
     const iFile = e.target.files[0];
@@ -111,7 +111,7 @@ function Register() {
             type="file"
             ref={getImage}
             // onChange={e => setImage(e.target.files[0])}
-            onChange={e => showImage(e)}
+            onChange={e => handleImageUpload(e)}
           />
           <button onClick={() => getImage.current.click()} type="button">
             Upload Image
