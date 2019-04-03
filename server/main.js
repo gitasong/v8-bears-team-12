@@ -19,6 +19,8 @@ const DEBUG = NODE_ENV === 'development';
 
 const yelpSearch = require('./api/yelpSearch');
 
+const users = require('./routes/api/users');
+
 if (!NODE_ENV) {
   console.error('NODE_ENV not defined');
   process.exit(1);
@@ -58,6 +60,9 @@ app.get('*', (req, res) => {
 
 (async function runServer() {
   await dbConnection();
+
+  // Use Routes
+  app.use('/user', users);
 
   // listen for requests :)
   const listener = app.listen(process.env.PORT, () => {
