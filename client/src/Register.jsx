@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function Register() {
-  const [image, setImage] = useState({});
+  const [avatar, setAvatar] = useState(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -33,16 +34,33 @@ function Register() {
 
   function handleImageUpload(e) {
     console.log(e.target.files[0]);
+    setAvatar(e.target.files[0]);
 
-    const iFile = e.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(iFile);
-    reader.onload = e => {
-      console.log(e.target.result);
-    };
+    // const iFile = e.target.files[0];
+    // const reader = new FileReader();
+    // reader.readAsDataURL(iFile);
+    // reader.onload = e => {
+    //   console.log(e.target.result);
+    // };
+
+    // axios.post('')
 
     // TODO: Store image to database to be shown as user image
   }
+
+  useEffect(() => {
+    console.log('inuseEffect');
+    function updateAvatar(avatar) {
+      console.log('inside updateAvatar');
+      const fd = new FormData();
+      fd.append('image', avatar, avatar.name);
+      setAvatar(fd);
+    }
+    if (avatar) {
+      console.log('avatar', avatar);
+      updateAvatar;
+    }
+  });
 
   function onSubmit(e) {
     e.preventDefault();
@@ -53,7 +71,7 @@ function Register() {
     ) {
       // create new user
       const newUser = {
-        image,
+        avatar,
         firstName,
         lastName,
         email,
@@ -65,8 +83,10 @@ function Register() {
 
       console.log(newUser);
 
+      axios.post('/api/register', { user: newUser });
+
       // reset all fields
-      setImage({});
+      setAvatar(null);
       setFirstName('');
       setLastName('');
       setEmail('');
@@ -103,14 +123,14 @@ function Register() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundImage: { image },
+            backgroundImage: { avatar },
           }}
         >
           <input
             style={{ display: 'none' }}
             type="file"
             ref={getImage}
-            // onChange={e => setImage(e.target.files[0])}
+            // onChange={e => setAvatar(e.target.files[0])}
             onChange={e => handleImageUpload(e)}
           />
           <button onClick={() => getImage.current.click()} type="button">

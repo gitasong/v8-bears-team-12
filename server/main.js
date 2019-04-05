@@ -53,6 +53,36 @@ app.get('/restaurant-search/:location/:term', async (req, res) => {
   }
 });
 
+app.post('/api/register', async (req, res) => {
+  console.log({ theBody: req.body });
+  const {
+    avatar,
+    firstName,
+    lastName,
+    name,
+    email,
+    password,
+    interests,
+  } = req.body.user;
+  try {
+    let user = new User({
+      avatar,
+      name,
+      firstName,
+      lastName,
+      email,
+      password,
+      interests,
+    });
+
+    await user.save();
+    res.send('ok');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+  }
+});
+
 authHandlers(app);
 app.get('*', (req, res) => {
   res.render('index', { locals: { DEBUG } });
